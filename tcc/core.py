@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-from . import helpers
+class Model(object):
+    def __init__(self):
+        pass
 
-def get_hmm():
-    """Get a thought."""
-    return 'hmmm...'
+    def train(self, X_train, y_train):
+        pass
 
+    def load_default(self):
+        pass
 
-def hmm():
-    """Contemplation..."""
-    if helpers.get_answer():
-        print(get_hmm())
+    def predict(self, comment):
+        pass
+
