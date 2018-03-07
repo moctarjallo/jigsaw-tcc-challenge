@@ -28,6 +28,6 @@ Move to the downloaded repository and install the dependencies by typing the com
   
 Cool !
 
-Now move to tcc/ directory and run this program by typing the command:
-  python3 main.py
+Now move to the project directory and run this program by typing the command:
+  python3 tcc/main.py
   
