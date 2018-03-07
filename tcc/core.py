@@ -31,7 +31,6 @@ class ToxicComments:
     def __len__(self):
         return self.batch_size
 
-
     def __iter__(self):
         return self
 
@@ -52,7 +51,7 @@ class ToxicComments:
         labels = [list(result.values[i][2:]) for i in range(self.batch_size)]
         return ids, comments, labels
 
-
+"""Return an array of floats from document"""
 def prepare(document, n_features):
     return HashingVectorizer(n_features=n_features)\
             .transform(document)\
