@@ -62,14 +62,23 @@ class ToxicModel:
     def __init__(self, input_shape, output_shape):
         self.model = Sequential()
         self.model.add(Dense(10, input_shape=(input_shape,)))
+        self.model.add(Dense(256, activation='relu'))
+        self.model.add(Dense(256, activation='relu'))
+        self.model.add(Dense(128, activation='relu'))
         self.model.add(Dense(output_shape, activation='softmax'))
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
     def train(self, X, y, callback_dirs=[None, None]):
-        self.model.fit(X, y, batch_size=10, epochs=10,\
+        self.model.fit(X, y, batch_size=128, epochs=10,\
                        callbacks=[TensorBoard(callback_dirs[0]),\
                                   ModelCheckpoint(os.path.join(callback_dirs[1], \
-                                        'weigths{epoch:02d}-{loss:.4f}.hdf5'))])
+                                        'weigths{epoch:02d}-{loss:.4f}.hdf5'), save_best_only=True)])
 
     def predict(self, X):
         return np.round(self.model.predict(X), 1)
+
+    def load(self, weights_path):
+        self.model.load_weights(weights_path)
+
+    def save(self, weights_path):
+        self.model.save(weights_path)

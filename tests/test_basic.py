@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from context import ToxicComments, prepare
+from context import ToxicComments, prepare, ToxicModel, save_array
 
 import unittest
 
@@ -59,9 +59,24 @@ Congratulations from me as well, use the tools well.  · talk \"""",\
                                          self.comments[2*self.batch_size:3*self.batch_size],
                                          self.labels[2*self.batch_size:3*self.batch_size]))
 
-    def test_prepare(self):
-        print(prepare(next(self.tc)[1]))
+    # def test_prepare(self):
+    #     print(prepare(next(self.tc)[1]))
 
+
+class TestToxicModel(unittest.TestCase):
+    def setUp(self):
+        self.batch_size = 10000
+        self.n_features = 30
+        self.model = ToxicModel(self.n_features, 6)
+
+    def test_load_weights(self):
+        self.model.load('tcc/weigths09-0.2938.hdf5')
+        tc = ToxicComments('tcc/data/test.csv')
+        ids, comments, _ = next(tc)
+        comments  = prepare(comments, self.n_features)
+        predictions = self.model.predict(comments)
+        # print(predictions)
+        save_array(ids, predictions, 'tcc/data/test_submission1.csv')
 
 
 
