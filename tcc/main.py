@@ -9,7 +9,7 @@ from core import ToxicComments, ToxicModel, prepare
 def run():
     # Load data and build model
     batch_size = 10000
-    n_features = 30
+    n_features = 100
     tc = ToxicComments('tcc/data/train.csv', batch_size=batch_size)
     model = ToxicModel(n_features, 6)
 
@@ -32,7 +32,7 @@ def run():
     ids, comments, _ = next(tc_test)
     comments = prepare(comments, n_features=n_features)
     predictions = model.predict(comments)
-    save_array(ids, predictions, 'tcc/data/test_submission2.csv')
+    save_array(ids, predictions, 'tcc/data/test_submission5.csv')
 
 
 

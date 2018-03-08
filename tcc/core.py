@@ -6,8 +6,7 @@ import os
 from keras import Sequential
 from keras.callbacks import TensorBoard, ModelCheckpoint
 from keras.layers import Dense
-from keras.losses import categorical_crossentropy
-from keras.optimizers import adam, Adam
+from keras.layers import Dropout
 
 from sklearn.feature_extraction.text import HashingVectorizer
 
@@ -61,10 +60,18 @@ def prepare(document, n_features):
 class ToxicModel:
     def __init__(self, input_shape, output_shape):
         self.model = Sequential()
-        self.model.add(Dense(10, input_shape=(input_shape,)))
+        self.model.add(Dense(1024, input_shape=(input_shape,)))
+        self.model.add(Dropout(.8))
+        self.model.add(Dense(512, activation='relu'))
+        self.model.add(Dense(512, activation='relu'))
+        self.model.add(Dense(512, activation='relu'))
+        self.model.add(Dropout(.5))
         self.model.add(Dense(256, activation='relu'))
         self.model.add(Dense(256, activation='relu'))
+        self.model.add(Dropout(.5))
         self.model.add(Dense(128, activation='relu'))
+        self.model.add(Dense(128, activation='relu'))
+        self.model.add(Dropout(.2))
         self.model.add(Dense(output_shape, activation='softmax'))
         self.model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
@@ -72,7 +79,7 @@ class ToxicModel:
         self.model.fit(X, y, batch_size=128, epochs=10,\
                        callbacks=[TensorBoard(callback_dirs[0]),\
                                   ModelCheckpoint(os.path.join(callback_dirs[1], \
-                                        'weigths{epoch:02d}-{loss:.4f}.hdf5'), save_best_only=True)])
+                                        'weigths{epoch:02d}-{loss:.4f}.hdf5'))])
 
     def predict(self, X):
         return np.round(self.model.predict(X), 1)
